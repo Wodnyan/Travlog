@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { UserLocationInfo } from "../../interfaces"
 import styled from "styled-components";
 import mapboxgl from "mapbox-gl";
+import Burger from "../Burger/Burger"
 
 const MapContainer = styled.section`
   height: 100%;
@@ -30,6 +31,7 @@ const Map = () => {
   return (
     <>
       <MapContainer ref={mapRef} />
+      <Burger />
     </>
   );
 };
