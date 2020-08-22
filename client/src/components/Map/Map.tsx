@@ -1,8 +1,19 @@
 import React, { useState, useRef, useEffect } from "react";
-import { UserLocationInfo } from "../../interfaces"
+import { UserLocationInfo } from "../../interfaces";
 import styled from "styled-components";
 import mapboxgl from "mapbox-gl";
-import Burger from "../Burger/Burger"
+import Menu from "../Menu/Menu";
+
+const Container = styled.div`
+  position: relative;
+  height: 100%;
+`
+
+const Nav = styled.nav`
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+`
 
 const MapContainer = styled.section`
   height: 100%;
@@ -29,10 +40,12 @@ const Map = () => {
       .then((resp: any) => setLocation({lat: resp.lat, long: resp.lon}))
   }, []);
   return (
-    <>
+    <Container>
       <MapContainer ref={mapRef} />
-      <Burger />
-    </>
+      <Nav>
+        <Menu />
+      </Nav>
+    </Container>
   );
 };
 export default Map;
