@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { UserLocationInfo } from "../../interfaces";
+import { UserLocationInfo } from "../../types";
 import styled from "styled-components";
 import mapboxgl from "mapbox-gl";
 import Menu from "../Menu/Menu";
