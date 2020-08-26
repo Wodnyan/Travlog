@@ -1,8 +1,10 @@
 import passport from "passport";
 import dotenv from "dotenv";
-import passportGithub from "passport-github";
+import passportGithub, { Strategy } from "passport-github";
+import passportFacebook from "passport-facebook";
 import { OAuthUser } from "../db/db";
 import { OAuthUserInterface } from "../types";
+import { PromiseProvider } from "mongoose";
 
 dotenv.config();
 
@@ -16,6 +18,7 @@ function passportConfig() {
   })
 
   const GithubStrategy = passportGithub.Strategy;
+  const FacebookStrategy = passportFacebook.Strategy;
 
   passport.use(
     new GithubStrategy({
@@ -24,7 +27,7 @@ function passportConfig() {
       callbackURL: "/auth/github/callback"
     }, async (accessToken, refreshToke, profile, done) => {
       try {
-        const existingUser = await OAuthUser.findOne({username: profile.username, provider: profile.provider});
+        const existingUser = await OAuthUser.findOne({provider_id: profile.id, provider: profile.provider});
         if (existingUser) {
           done(null, existingUser);
         } else if (existingUser === null){
@@ -39,6 +42,25 @@ function passportConfig() {
         }
       } catch(error) {
         console.log(error);
+      }
+    })
+  )
+  passport.use(new FacebookStrategy({
+      clientID: process.env.FACEBOOK_KEY!,
+      clientSecret: process.env.FACEBOOK_SECRET!,
+      callbackURL: "/auth/facebook/callback"
+    }, async (accessToken, refreshToke, profile, done) => {
+      const existingUser = await OAuthUser.findOne({provider_id: profile.id, provider: profile.provider})
+      if(existingUser) {
+        done(null, existingUser);
+      } else {
+        const newUser = await OAuthUser.create({
+            username: profile.displayName,
+            provider: profile.provider,
+            provider_id: profile.id,
+            avatar_url: `https://graph.facebook.com/${profile.id}/picture`
+        })
+        done(null, newUser);
       }
     })
   )

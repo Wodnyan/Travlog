@@ -10,6 +10,12 @@ router.get("/github/callback", passport.authenticate("github", {
   successRedirect: CLIENT_URL
 }));
 
+router.get("/facebook", passport.authenticate("facebook"));
+router.get("/facebook/callback", passport.authenticate("facebook", {
+  failureRedirect: "/",
+  successRedirect: CLIENT_URL
+}));
+
 router.get("/login", (req, res) => {
   if(req.user) {
     res.json(req.user);
