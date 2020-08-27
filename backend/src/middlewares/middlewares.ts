@@ -16,6 +16,11 @@ export function errorHandler(
   res: express.Response,
   next: express.NextFunction
 ) {
-  console.log(req.statusCode);
-  res.send("oops");
+  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+  res.status(statusCode);
+  res.json({
+    message: error.message,
+    code: statusCode,
+    stack: process.env.NODE_ENV === "production" ? undefined : error.stack,
+  });
 }
