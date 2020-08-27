@@ -8,6 +8,7 @@ import morgan from "morgan";
 import helmet from "helmet";
 import passportSetup from "./config/passport-config";
 import auth from "./auth/auth";
+import { notFoundHandler, errorHandler } from "./middlewares/middlewares";
 dotenv.config();
 
 const app = express();
@@ -30,6 +31,8 @@ app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use("/auth", auth);
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
