@@ -4,6 +4,8 @@ import cookieParser from "cookie-parser";
 import passport from "passport";
 import cors from "cors";
 import dotenv from "dotenv";
+import morgan from "morgan";
+import helmet from "helmet";
 import passportSetup from "./config/passport-config";
 import auth from "./auth/auth";
 dotenv.config();
@@ -13,6 +15,8 @@ const PORT = process.env.PORT || 5050;
 
 passportSetup();
 
+app.use(morgan("common"));
+app.use(helmet());
 app.use(cors());
 app.use(express.json());
 app.use(
