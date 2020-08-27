@@ -21,6 +21,6 @@ export function errorHandler(
   res.json({
     message: error.message,
     code: statusCode,
-    stack: process.env.NODE_ENV === "production" ? undefined : error.stack;
-  })
+    stack: process.env.NODE_ENV === "production" ? undefined : error.stack,
+  });
 }
