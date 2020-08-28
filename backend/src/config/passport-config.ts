@@ -3,13 +3,13 @@ import dotenv from "dotenv";
 import passportGithub, { Strategy } from "passport-github";
 import passportFacebook from "passport-facebook";
 import { User } from "../db/db";
-import { OAuthUserInterface } from "../types";
+import { UserTypes } from "../types";
 import { PromiseProvider } from "mongoose";
 
 dotenv.config();
 
 function passportConfig() {
-  passport.serializeUser((user: OAuthUserInterface, done) => {
+  passport.serializeUser((user: UserTypes, done) => {
     return done(null, user._id);
   });
   passport.deserializeUser(async (userId, done) => {
