@@ -2,7 +2,7 @@ import passport from "passport";
 import dotenv from "dotenv";
 import passportGithub, { Strategy } from "passport-github";
 import passportFacebook from "passport-facebook";
-import { OAuthUser } from "../db/db";
+import { User } from "../db/db";
 import { OAuthUserInterface } from "../types";
 import { PromiseProvider } from "mongoose";
 
@@ -13,8 +13,8 @@ function passportConfig() {
     return done(null, user._id);
   });
   passport.deserializeUser(async (userId, done) => {
-    const foo = await OAuthUser.findById(userId);
-    return done(null, foo);
+    const user = await User.findById(userId);
+    return done(null, user);
   });
 
   const GithubStrategy = passportGithub.Strategy;
@@ -29,24 +29,23 @@ function passportConfig() {
       },
       async (accessToken, refreshToke, profile, done) => {
         try {
-          const existingUser = await OAuthUser.findOne({
+          const existingUser = await User.findOne({
+            provider: "github",
             provider_id: profile.id,
-            provider: profile.provider,
           });
-          if (existingUser) {
-            done(null, existingUser);
-          } else if (existingUser === null) {
-            const newUser = await OAuthUser.create({
+          if (existingUser === null) {
+            const newUser = await User.create({
               username: profile.username,
-              provider: profile.provider,
+              provider: "github",
               provider_id: profile.id,
-              // @ts-ignore
+              //@ts-ignore
               avatar_url: profile._json.avatar_url,
             });
-            done(null, newUser);
+          } else {
+            return done(null, existingUser);
           }
         } catch (error) {
-          console.log(error);
+          done(error);
         }
       }
     )
@@ -59,20 +58,23 @@ function passportConfig() {
         callbackURL: "/auth/facebook/callback",
       },
       async (accessToken, refreshToke, profile, done) => {
-        const existingUser = await OAuthUser.findOne({
-          provider_id: profile.id,
-          provider: profile.provider,
-        });
-        if (existingUser) {
-          done(null, existingUser);
-        } else {
-          const newUser = await OAuthUser.create({
-            username: profile.displayName,
-            provider: profile.provider,
+        try {
+          const existingUser = await User.findOne({
+            provider: "facebook",
             provider_id: profile.id,
-            avatar_url: `https://graph.facebook.com/${profile.id}/picture`,
           });
-          done(null, newUser);
+          if (existingUser === null) {
+            const newUser = await User.create({
+              username: profile.displayName,
+              provider: "facebook",
+              provider_id: profile.id,
+              avatar_url: `https://graph.facebook.com/${profile.id}/picture`,
+            });
+          } else {
+            return done(null, existingUser);
+          }
+        } catch (error) {
+          done(error);
         }
       }
     )

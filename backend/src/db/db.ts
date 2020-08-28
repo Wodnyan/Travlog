@@ -15,11 +15,20 @@ mongoose.connect(
   }
 );
 
-const OAuthUserSchema = new Schema({
-  username: { type: String, required: true },
-  provider: { type: String, required: true },
-  provider_id: { type: Number, required: true },
-  avatar_url: { type: String, required: true },
+const userSchema = new Schema({
+  username: { type: String, unique: true },
+  password: { type: String },
+  provider: { type: String },
+  provider_id: { type: Number },
+  avatar_url: { type: String },
 });
 
-export const OAuthUser = model("OAuth-user", OAuthUserSchema);
+const TravelLogSchema = new Schema({
+  title: { type: String, required: true },
+  description: { type: String },
+  long: { type: Number, required: true },
+  lat: { type: Number, required: true },
+});
+
+export const User = model("users", userSchema);
+export const TravelLog = model("travel-log", TravelLogSchema);
