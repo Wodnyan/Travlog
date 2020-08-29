@@ -7,6 +7,8 @@ import {
 } from "../components/Input/Input";
 import { Button } from "../styles/Button";
 import { Form } from "../styles/Form";
+import { SplitInTwoVertical, ImageContainer } from "../styles/Global";
+import EarthImage from "../images/world-min.jpg";
 
 const inputInitArgs = {
   username: "",
@@ -24,35 +26,40 @@ const Login = () => {
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <FloatingLabel label="username">
-        <TextInput
-          name="username"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            inputDispatch({
-              type: "field",
-              field: e.target.name,
-              targetValue: e.target.value,
-            })
-          }
-          value={input.username}
-        />
-      </FloatingLabel>
-      <FloatingLabel label="password">
-        <PasswordInput
-          name="password"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            inputDispatch({
-              type: "field",
-              field: e.target.name,
-              targetValue: e.target.value,
-            })
-          }
-          value={input.password}
-        />
-      </FloatingLabel>
-      <Button type="submit">Login</Button>
-    </Form>
+    <SplitInTwoVertical>
+      <ImageContainer>
+        <img src={EarthImage} alt="earth" />
+      </ImageContainer>
+      <Form onSubmit={handleSubmit}>
+        <FloatingLabel label="username">
+          <TextInput
+            name="username"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              inputDispatch({
+                type: "field",
+                field: e.target.name,
+                targetValue: e.target.value,
+              })
+            }
+            value={input.username}
+          />
+        </FloatingLabel>
+        <FloatingLabel label="password">
+          <PasswordInput
+            name="password"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              inputDispatch({
+                type: "field",
+                field: e.target.name,
+                targetValue: e.target.value,
+              })
+            }
+            value={input.password}
+          />
+        </FloatingLabel>
+        <Button type="submit">Login</Button>
+      </Form>
+    </SplitInTwoVertical>
   );
 };
 
