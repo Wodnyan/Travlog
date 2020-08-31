@@ -1,4 +1,5 @@
 import mongoose, { Schema, model } from "mongoose";
+import { UserDoc } from "../types";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -15,20 +16,20 @@ mongoose.connect(
   }
 );
 
-const userSchema = new Schema({
-  username: { type: String, unique: true },
-  password: { type: String },
-  provider: { type: String },
-  provider_id: { type: Number },
-  avatar_url: { type: String },
-});
-
-const TravelLogSchema = new Schema({
+const travelLogSchema = new Schema({
   title: { type: String, required: true },
   description: { type: String },
   long: { type: Number, required: true },
   lat: { type: Number, required: true },
 });
 
-export const User = model("users", userSchema);
-export const TravelLog = model("travel-log", TravelLogSchema);
+const userSchema = new Schema({
+  username: { type: String, unique: true },
+  password: { type: String },
+  provider: { type: String },
+  provider_id: { type: Number },
+  avatar_url: { type: String },
+  travel_logs: [travelLogSchema],
+});
+
+export const User = model<UserDoc>("users", userSchema);
