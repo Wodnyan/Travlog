@@ -8,6 +8,7 @@ import morgan from "morgan";
 import helmet from "helmet";
 import passportSetup from "./config/passport-config";
 import auth from "./auth/auth";
+import api from "./api/api";
 import { notFoundHandler, errorHandler } from "./middlewares/middlewares";
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use("/auth", auth);
+app.use("/api/v1", api);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
