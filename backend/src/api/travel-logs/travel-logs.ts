@@ -55,7 +55,7 @@ router.post("/:userId", async (req, res, next) => {
     );
     res.json({
       message: "Successfully created an entry",
-      travelLogs: travel_logs,
+      data: travel_logs,
     });
   } catch (error) {
     next(error);
