@@ -28,10 +28,6 @@ router.get("/:userId/:logId", async (req, res, next) => {
       res.status(400);
       throw new Error("User id or travel log id missing");
     }
-    if (!userId) {
-      res.status(400);
-      throw new Error("User id missing");
-    }
     const { travel_logs } = await User.findById(userId, "travel_logs");
     res.json({
       message: "success",
@@ -52,13 +48,14 @@ router.post("/:userId", async (req, res, next) => {
       res.status(400);
       throw new Error("User id or request body missing");
     }
-    const newEntry = await User.findByIdAndUpdate(
+    const { travel_logs } = await User.findByIdAndUpdate(
       { _id: userId },
-      { $push: { travel_logs: travelLog } }
+      { $push: { travel_logs: travelLog } },
+      { new: true }
     );
     res.json({
       message: "Successfully created an entry",
-      newEntry,
+      data: travel_logs,
     });
   } catch (error) {
     next(error);
