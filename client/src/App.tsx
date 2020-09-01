@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { GlobalStyles } from "./styles/Global";
-import Map from "./components/Map/Map";
+import Map from "./views/Map";
 import LoginPage from "./views/Login";
 import SignUpPage from "./views/SignUp";
 
