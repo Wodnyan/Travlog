@@ -17,10 +17,10 @@ mongoose.connect(
 );
 
 const travelLogSchema = new Schema({
-  title: { type: String, required: true },
+  title: { type: String },
   description: { type: String },
-  long: { type: Number, required: true },
-  lat: { type: Number, required: true },
+  long: { type: Number },
+  lat: { type: Number },
 });
 
 const userSchema = new Schema({

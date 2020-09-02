@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { User } from "../../db/db";
+import { TravelLog } from "../../types";
 
 const router = Router();
 
@@ -13,7 +14,7 @@ router.get("/:userId", async (req, res, next) => {
     }
     const { travel_logs } = await User.findById(userId, "travel_logs");
     res.json({
-      message: "success",
+      message: "Successfully returned all entries",
       data: travel_logs,
     });
   } catch (error) {
@@ -28,10 +29,12 @@ router.get("/:userId/:logId", async (req, res, next) => {
       res.status(400);
       throw new Error("User id or travel log id missing");
     }
-    const { travel_logs } = await User.findById(userId, "travel_logs");
-    res.json({
-      message: "success",
-      data: travel_logs,
+    User.findById(userId, (err, doc) => {
+      if (err) next(err);
+      res.json({
+        message: "Successfully returned 1 entry",
+        data: doc!.travel_logs!.id(logId),
+      });
     });
   } catch (error) {
     next(error);
@@ -62,7 +65,29 @@ router.post("/:userId", async (req, res, next) => {
   }
 });
 //Update One
-router.put("/:logId", (req, res, next) => {});
+router.put("/:userId/:logId", async (req, res, next) => {
+  const { logId, userId } = req.params;
+  if (!logId || !userId) {
+    res.status(400);
+    const error = new Error("User id or travel log id missing");
+    next(error);
+  }
+  User.findById(userId, (err, doc) => {
+    if (err) next(err);
+    const travelLog: TravelLog = doc!.travel_logs!.id(logId);
+    if (travelLog === null) {
+      res.status(404);
+      const error = new Error("Couldn't find entry");
+      next(error);
+    }
+    travelLog.set(req.body);
+    doc.save();
+    res.json({
+      message: "Successfully updated 1 entry",
+      data: doc,
+    });
+  });
+});
 //Delete One
 router.delete("/:logId", (req, res, next) => {});
 
