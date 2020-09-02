@@ -65,14 +65,14 @@ router.post("/:userId", async (req, res, next) => {
   }
 });
 //Update One
-router.put("/:userId/:logId", async (req, res, next) => {
+router.put("/:userId/:logId", (req, res, next) => {
   const { logId, userId } = req.params;
   if (!logId || !userId) {
     res.status(400);
     const error = new Error("User id or travel log id missing");
     next(error);
   }
-  User.findById(userId, (err, doc) => {
+  User.findById(userId, async (err, doc) => {
     if (err) next(err);
     const travelLog: TravelLog = doc!.travel_logs!.id(logId);
     if (travelLog === null) {
@@ -81,7 +81,7 @@ router.put("/:userId/:logId", async (req, res, next) => {
       next(error);
     }
     travelLog.set(req.body);
-    doc.save();
+    await doc.save();
     res.json({
       message: "Successfully updated 1 entry",
       data: doc,
@@ -89,6 +89,28 @@ router.put("/:userId/:logId", async (req, res, next) => {
   });
 });
 //Delete One
-router.delete("/:logId", (req, res, next) => {});
+router.delete("/:userId/:logId", (req, res, next) => {
+  const { logId, userId } = req.params;
+  if (!logId || !userId) {
+    res.status(400);
+    const error = new Error("User id or travel log id missing");
+    next(error);
+  }
+  User.findById(userId, async (err, doc) => {
+    if (err) next(err);
+    const travelLog: TravelLog = doc!.travel_logs!.id(logId);
+    if (travelLog === null) {
+      res.status(404);
+      const error = new Error("Couldn't find entry");
+      next(error);
+    }
+    travelLog.remove();
+    await doc.save();
+    res.json({
+      message: "Successfully updated 1 entry",
+      data: doc,
+    });
+  });
+});
 
 export default router;
