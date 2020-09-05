@@ -48,13 +48,13 @@ router.post("/local/register", async (req, res, next) => {
   }
 });
 
-router.get("/login", (req, res) => {
+router.get("/login", (req, res, next) => {
   if (req.user) {
     res.json(req.user);
   } else {
-    res.json({
-      error: "Something went wrong",
-    });
+    const error = new Error("Authentication failed");
+    res.status(401);
+    next(error);
   }
 });
 router.get("/logout", (req, res) => {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import styled from "styled-components";
 import ReactMapGl, { Marker } from "react-map-gl";
 
 interface MapViewport {
@@ -19,6 +20,10 @@ interface MarkerType {
   lng: number;
   lat: number;
 }
+
+const MapPin = styled.svg`
+  transform: translate(-50%, -100%);
+`;
 
 const Map = () => {
   const [logEntries, setLogEntries] = useState<[] | [LogEntry]>([]);
@@ -65,7 +70,20 @@ const Map = () => {
     >
       {newEntry && (
         <Marker longitude={newEntry.lng} latitude={newEntry.lat}>
-          <h1>Hello world</h1>
+          <MapPin
+            viewBox="0 0 24 24"
+            width="30"
+            height="30"
+            stroke="currentColor"
+            stroke-width="2"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            onClick={() => console.log("hello")}
+          >
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </MapPin>
         </Marker>
       )}
     </ReactMapGl>
