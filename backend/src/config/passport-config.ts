@@ -14,7 +14,11 @@ function passportConfig() {
     return done(null, user._id);
   });
   passport.deserializeUser(async (userId, done) => {
-    const user = await User.findById(userId);
+    const user = await User.findById(
+      userId,
+      "username _id provider avatar_url"
+    );
+    console.log(user);
     return done(null, user);
   });
 
