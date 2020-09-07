@@ -4,8 +4,7 @@ import bcrypt from "bcrypt";
 import passport from "passport";
 
 const router = Router();
-const CLIENT_URL = "http://localhost:3000";
-
+const CLIENT_URL = "http://localhost:3000/map";
 router.get("/github", passport.authenticate("github"));
 router.get(
   "/github/callback",
@@ -24,7 +23,7 @@ router.get(
   })
 );
 
-router.get(
+router.post(
   "/local",
   passport.authenticate("local", {
     successRedirect: CLIENT_URL,

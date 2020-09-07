@@ -5,7 +5,7 @@ const router = Router();
 
 router.use("/travel-logs", travelLogs);
 
-router.get("/", (req, res) => {
+router.get("/", (_req, res) => {
   res.json({
     message: "Welcome to my API",
   });

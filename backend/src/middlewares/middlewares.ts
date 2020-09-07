@@ -1,5 +1,20 @@
 import express from "express";
 
+export function checkAuth(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  console.log(req.user);
+  if (req.user) {
+    next();
+  } else {
+    const error = new Error("Failed authentication");
+    res.status(401);
+    next(error);
+  }
+}
+
 export function notFoundHandler(
   req: express.Request,
   res: express.Response,

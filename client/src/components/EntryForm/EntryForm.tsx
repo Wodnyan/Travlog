@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Button } from "../../styles/Button";
+import { LogEntry } from "../../types";
 
 const Form = styled.form`
   display: flex;
@@ -27,16 +28,84 @@ const Label = styled.label`
   font-size: 1.3em;
 `;
 
-const EntryForm: React.FC = () => {
+interface EntryForm {
+  lng: number;
+  lat: number;
+  onSubmitComplete?: () => void;
+  onSubmitFailure?: (error: any) => void;
+}
+
+const EntryForm: React.FC<EntryForm> = ({
+  onSubmitComplete,
+  onSubmitFailure,
+  lng,
+  lat,
+}) => {
+  const [fields, setFields] = useState<LogEntry>({
+    lng: lng,
+    lat: lat,
+    description: "",
+    title: "",
+  });
+
+  useEffect(() => {
+    setFields((prev) => ({
+      ...prev,
+      lng: lng,
+      lat: lat,
+    }));
+  }, [lng, lat]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const ENDPOINT = "http://localhost:5050/api/v1/travel-logs";
+    const options: RequestInit = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        title: fields.title,
+        description: fields.description,
+        lat: fields.lat,
+        long: fields.lng,
+      }),
+    };
+    try {
+      const addNewEntry = await fetch(ENDPOINT, options);
+      const resp = await addNewEntry.json();
+      if (onSubmitComplete) {
+        onSubmitComplete();
+      }
+    } catch (error) {
+      if (onSubmitFailure) {
+        onSubmitFailure(error);
+      }
+    }
+  };
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    e.persist();
+    setFields((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
       <Label>
         Title
-        <Input />
+        <Input name="title" value={fields.title} onChange={handleChange} />
       </Label>
       <Label>
         Description
-        <TextField />
+        <TextField
+          name="description"
+          value={fields.description}
+          onChange={handleChange}
+        />
       </Label>
       <Button>Submit</Button>
     </Form>
