@@ -1,8 +1,3 @@
-export interface UserLocationInfo {
-  long: number;
-  lat: number;
-}
-
 export interface FormInput {
   username: string;
   password: string;
@@ -10,9 +5,15 @@ export interface FormInput {
   isLoading?: boolean;
 }
 
-export type InputReducerAction = 
-  | {type: "field"; field: string; targetValue: string}
-  | {type: "login"}
-  | {type: "signUp"}
-  | {type: "loading"}
-  | {type: "error"}
+export type InputReducerAction =
+  | { type: "field"; fieldName: string; fieldValue: string }
+  | { type: "loading"; payload: boolean }
+  | { type: "error"; payload: string };
+
+export interface LogEntry {
+  _id?: string;
+  title: string;
+  description: string;
+  lng: number;
+  lat: number;
+}
