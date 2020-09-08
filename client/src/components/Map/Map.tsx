@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReactMapGl, { Marker, PointerEvent, Popup } from "react-map-gl";
 import NewMarker from "./NewMarker";
+import MapPin from "./MapPin";
 import { LogEntry } from "../../types";
 
 interface MapViewport {
@@ -28,6 +29,28 @@ const Map = () => {
     longitude: 0,
     zoom: 1,
   });
+  //Get Logs
+  useEffect(() => {
+    async function getLogEntries() {
+      const ENDPOINT = "http://localhost:5050/api/v1/travel-logs";
+      const resp = await fetch(ENDPOINT, { credentials: "include" });
+      const { data } = await resp.json();
+      console.log(data);
+      data.forEach((entry: any) => {
+        setLogEntries((prev) => [
+          ...prev,
+          {
+            _id: entry._id,
+            description: entry.description,
+            title: entry.title,
+            lat: entry.lat,
+            lng: entry.long,
+          },
+        ]);
+      });
+    }
+    getLogEntries();
+  }, []);
   //Resize map on browser resize.
   useEffect(() => {
     const resizeMapDimensions = (e: UIEvent) => {
@@ -44,6 +67,7 @@ const Map = () => {
       window.removeEventListener("resize", resizeMapDimensions);
     };
   });
+
   const handleAddNewMarker = (e: PointerEvent) => {
     setNewMarkerLocation((prev) => {
       return {
@@ -63,6 +87,11 @@ const Map = () => {
       {newMarkerLocation && (
         <NewMarker lng={newMarkerLocation.lng} lat={newMarkerLocation.lat} />
       )}
+      {(logEntries as LogEntry[]).map((entry) => (
+        <Marker key={entry._id} latitude={entry.lat} longitude={entry.lng}>
+          <MapPin />
+        </Marker>
+      ))}
     </ReactMapGl>
   );
 };
