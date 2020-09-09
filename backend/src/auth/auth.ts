@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { User } from "../db/db";
+import { checkUsername } from "../middlewares/middlewares";
 import bcrypt from "bcrypt";
 import passport from "passport";
 
@@ -26,10 +27,17 @@ router.get(
 router.post(
   "/local",
   passport.authenticate("local", {
-    successRedirect: CLIENT_URL,
-  })
+    failureRedirect: CLIENT_URL,
+  }),
+  (req, res) => {
+    const user: any = req.user;
+    res.json({
+      message: "Successful Authentication",
+      user: { username: user.username, id: user._id },
+    });
+  }
 );
-router.post("/local/register", async (req, res, next) => {
+router.post("/local/register", checkUsername, async (req, res, next) => {
   const { username, password } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
