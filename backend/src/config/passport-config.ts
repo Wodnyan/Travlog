@@ -5,12 +5,12 @@ import passportFacebook from "passport-facebook";
 import passportLocal from "passport-local";
 import bcrypt from "bcrypt";
 import { User } from "../db/db";
-import { UserTypes } from "../types";
+import { UserDoc } from "../types";
 
 dotenv.config();
 
 function passportConfig() {
-  passport.serializeUser((user: UserTypes, done) => {
+  passport.serializeUser((user: UserDoc, done) => {
     return done(null, user._id);
   });
   passport.deserializeUser(async (userId, done) => {
@@ -18,7 +18,6 @@ function passportConfig() {
       userId,
       "username _id provider avatar_url"
     );
-    console.log(user);
     return done(null, user);
   });
 
@@ -60,7 +59,7 @@ function passportConfig() {
           });
           if (existingUser === null) {
             const newUser = await User.create({
-              username: profile.username,
+              username: profile.username!,
               provider: "github",
               provider_id: profile.id,
               //@ts-ignore

@@ -1,17 +1,14 @@
 import { Router } from "express";
 import { User } from "../../db/db";
 import { TravelLog } from "../../types";
+import { checkAuth } from "../../middlewares/middlewares";
 
 const router = Router();
 
 //Get All
-router.get("/:userId", async (req, res, next) => {
+router.get("/", checkAuth, async (req, res, next) => {
   try {
-    const { userId } = req.params;
-    if (!userId) {
-      res.status(400);
-      throw new Error("User id missing");
-    }
+    const userId = req.user!._id;
     const { travel_logs } = await User.findById(userId, "travel_logs");
     res.json({
       message: "Successfully returned all entries",
@@ -22,10 +19,11 @@ router.get("/:userId", async (req, res, next) => {
   }
 });
 //Get One
-router.get("/:userId/:logId", async (req, res, next) => {
+router.get("/:logId", checkAuth, (req, res, next) => {
   try {
-    const { logId, userId } = req.params;
-    if (!logId || !userId) {
+    const { logId } = req.params;
+    const userId = req.user!._id;
+    if (!logId) {
       res.status(400);
       throw new Error("User id or travel log id missing");
     }
@@ -40,14 +38,13 @@ router.get("/:userId/:logId", async (req, res, next) => {
     next(error);
   }
 });
-//TODO: Secure these.
 
 //Post
-router.post("/:userId", async (req, res, next) => {
+router.post("/", checkAuth, async (req, res, next) => {
   try {
-    const { userId } = req.params;
+    const userId = req.user!._id;
     const travelLog = req.body;
-    if (!userId || !travelLog) {
+    if (!travelLog) {
       res.status(400);
       throw new Error("User id or request body missing");
     }
@@ -65,16 +62,18 @@ router.post("/:userId", async (req, res, next) => {
   }
 });
 //Update One
-router.put("/:userId/:logId", (req, res, next) => {
-  const { logId, userId } = req.params;
-  if (!logId || !userId) {
+router.put("/:logId", checkAuth, (req, res, next) => {
+  const { logId } = req.params;
+  const userId = req.user!._id;
+  if (!logId) {
     res.status(400);
-    const error = new Error("User id or travel log id missing");
+    const error = new Error("Log id missing from URL");
     next(error);
   }
   User.findById(userId, async (err, doc) => {
     if (err) next(err);
     const travelLog: TravelLog = doc!.travel_logs!.id(logId);
+    //Check if entry with the provided id exists.
     if (travelLog === null) {
       res.status(404);
       const error = new Error("Couldn't find entry");
@@ -89,9 +88,10 @@ router.put("/:userId/:logId", (req, res, next) => {
   });
 });
 //Delete One
-router.delete("/:userId/:logId", (req, res, next) => {
-  const { logId, userId } = req.params;
-  if (!logId || !userId) {
+router.delete("/:logId", checkAuth, (req, res, next) => {
+  const { logId } = req.params;
+  const userId = req.user!._id;
+  if (!logId) {
     res.status(400);
     const error = new Error("User id or travel log id missing");
     next(error);
