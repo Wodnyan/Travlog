@@ -19,7 +19,21 @@ passportSetup();
 
 app.use(morgan("common"));
 app.use(helmet());
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: ["GET", "PUT", "HEAD", "PATCH", "DELETE", "POST", "OPTIONS"],
+    allowedHeaders: [
+      "X-Requested-With",
+      "X-HTTP-Method-Override",
+      "Content-Type",
+      "Accept",
+      "Access-Control-Allow-Credentials",
+      "Authorization",
+    ],
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(
   cookieSession({
