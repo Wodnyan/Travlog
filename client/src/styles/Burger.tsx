@@ -10,7 +10,7 @@ export const BurgerContainer = styled.div`
   border-radius: 50%;
   background: black;
   cursor: pointer;
-`
+`;
 export const BurgerLines = styled.div`
   position: relative;
   width: 30px;
@@ -25,7 +25,7 @@ export const BurgerLines = styled.div`
     width: 30px;
     border-radius: 10px;
     background-color: #fff;
-    transition: .2s ease transform;
+    transition: 0.2s ease transform;
   }
   &::after {
     transform: translateY(-16px);
@@ -42,5 +42,4 @@ export const BurgerLines = styled.div`
       transform: rotate(-45deg);
     }
   }
-
-`
+`;
