@@ -1,5 +1,5 @@
-import React, { useReducer, useState } from "react";
-import { Redirect } from "react-router-dom";
+import React, { useReducer } from "react";
+import { useHistory } from "react-router-dom";
 import { inputReducer } from "../reducers";
 import {
   TextInput,
@@ -35,7 +35,7 @@ const ErrorMessage = styled.p`
 
 const Login = () => {
   const [input, inputDispatch] = useReducer(inputReducer, inputInitArgs);
-  const [redirect, setRedirect] = useState(false);
+  const history = useHistory();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -60,14 +60,13 @@ const Login = () => {
           payload: resp.message,
         });
       } else {
-        setRedirect(true);
+        history.push("/map");
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  if (redirect) return <Redirect to="/map" />;
   return (
     <SplitInTwoVertical>
       <ImageContainer>

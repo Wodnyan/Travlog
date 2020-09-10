@@ -17,3 +17,9 @@ export interface LogEntry {
   lng: number;
   lat: number;
 }
+
+export interface User {
+  _id: string;
+  username: string;
+  provider: "local" | "github" | "facebook";
+}

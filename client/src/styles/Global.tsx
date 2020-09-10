@@ -1,6 +1,7 @@
 import styled, { createGlobalStyle } from "styled-components";
 
 export const GlobalStyles = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
   *,
   *::after,
   *::before {
@@ -14,6 +15,9 @@ export const GlobalStyles = createGlobalStyle`
     height: 100%;
     background: grey;
   }
+  body {
+    font-family: 'Roboto', sans-serif;
+  }
 `;
 export const SplitInTwoVertical = styled.div`
   height: 100%;
@@ -21,7 +25,6 @@ export const SplitInTwoVertical = styled.div`
   grid-template-columns: 1fr 1fr;
   align-content: center;
 `;
-
 export const ImageContainer = styled.div`
   height: 100%;
   width: 100%;
@@ -29,4 +32,16 @@ export const ImageContainer = styled.div`
   img {
     object-fit: fill;
   }
+`;
+export const FullHeightCenter = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+export const Title = styled.h1``;
+export const ErrorMessage = styled.p`
+  font-size: 1.2rem;
+  color: red;
 `;
