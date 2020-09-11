@@ -3,6 +3,7 @@ import ReactMapGl, { Marker, PointerEvent, Popup } from "react-map-gl";
 import NewMarker from "./NewMarker";
 import MapPin from "./MapPin";
 import { LogEntry } from "../../types";
+import EntryCard from "../EntryCard/EntryCard";
 
 interface MapViewport {
   width: string | number;
@@ -22,6 +23,7 @@ const Map = () => {
   const [newMarkerLocation, setNewMarkerLocation] = useState<null | NewEntry>(
     null
   );
+  const [showPopup, setShowPopup] = useState<null | string>(null);
   const [viewport, setViewport] = useState<MapViewport>({
     width: "100%",
     height: "100%",
@@ -35,7 +37,9 @@ const Map = () => {
       const ENDPOINT = "http://localhost:5050/api/v1/travel-logs";
       const resp = await fetch(ENDPOINT, { credentials: "include" });
       const { data } = await resp.json();
-      console.log(data);
+      if (!data) {
+        return console.log("No entries found");
+      }
       data.forEach((entry: any) => {
         setLogEntries((prev) => [
           ...prev,
@@ -88,9 +92,22 @@ const Map = () => {
         <NewMarker lng={newMarkerLocation.lng} lat={newMarkerLocation.lat} />
       )}
       {(logEntries as LogEntry[]).map((entry) => (
-        <Marker key={entry._id} latitude={entry.lat} longitude={entry.lng}>
-          <MapPin />
-        </Marker>
+        <div key={entry._id}>
+          <Marker latitude={entry.lat} longitude={entry.lng}>
+            <div onClick={() => setShowPopup(entry._id || null)}>
+              <MapPin />
+            </div>
+          </Marker>
+          {showPopup === entry._id && (
+            <Popup
+              latitude={entry.lat}
+              longitude={entry.lng}
+              closeButton={false}
+            >
+              <EntryCard title={entry.title} description={entry.description} />
+            </Popup>
+          )}
+        </div>
       ))}
     </ReactMapGl>
   );
