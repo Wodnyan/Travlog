@@ -40,7 +40,7 @@ const Map = () => {
   });
 
   useEffect(() => {
-    dispatch(addNotification("Double click on the map to add a new enty"));
+    dispatch(addNotification("Double click on the map to add a new entry"));
   }, [dispatch]);
 
   return (
