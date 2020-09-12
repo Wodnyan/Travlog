@@ -45,3 +45,18 @@ export const ErrorMessage = styled.p`
   font-size: 1.2rem;
   color: red;
 `;
+
+interface AbsoluteContainerProps {
+  top?: number;
+  bottom?: number;
+  right?: number;
+  left?: number;
+}
+
+export const AbsoluteContainer = styled.div<AbsoluteContainerProps>`
+  position: absolute;
+  top: ${(props) => props.top + "px" || 0};
+  bottom: ${(props) => props.bottom + "px" || 0};
+  right: ${(props) => props.right + "px" || 0};
+  left: ${(props) => props.left + "px" || 0};
+`;
