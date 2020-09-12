@@ -23,3 +23,8 @@ export interface User {
   username: string;
   provider: "local" | "github" | "facebook";
 }
+
+export interface ErrorMessage {
+  id: number;
+  message: string;
+}
