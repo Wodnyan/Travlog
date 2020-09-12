@@ -1,23 +1,27 @@
-import { User } from "../types";
+import { User, Notification } from "../types";
 
 export const addUser = (user: User) => ({
   type: "ADD_USER",
   payload: user,
 });
 
-let errorId = 0;
+let notificationId = 0;
 
-export const addError = (errorMessage: string) => ({
-  type: "ADD_ERROR",
+export const addNotification = (
+  message: Notification["message"],
+  type?: Notification["type"]
+) => ({
+  type: "ADD_NOTIFICATION",
   payload: {
-    id: errorId++,
-    message: errorMessage,
+    id: notificationId++,
+    message,
+    type: type,
   },
 });
 
-export const removeError = (errorId: number) => ({
-  type: "REMOVE_ERROR",
+export const removeNotification = (id: number) => ({
+  type: "REMOVE_NOTIFICATION",
   payload: {
-    id: errorId,
+    id,
   },
 });

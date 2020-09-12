@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 
 import user from "./user";
-import error from "./error";
+import notifications from "./notification";
 
-export default combineReducers({ user, error });
+export default combineReducers({ user, notifications });
