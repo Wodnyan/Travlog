@@ -39,6 +39,10 @@ const Map = () => {
     })();
   });
 
+  useEffect(() => {
+    dispatch(addNotification("Double click on the map to add a new enty"));
+  }, [dispatch]);
+
   return (
     <Container>
       <MapGl />

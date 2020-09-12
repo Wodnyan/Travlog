@@ -32,10 +32,6 @@ const App: React.FC<Props> = ({ notifications }) => {
     };
   });
 
-  useEffect(() => {
-    dispatch(addNotification("Double click on the map to add a new enty"));
-  }, [dispatch]);
-
   return (
     <>
       <GlobalStyles />
