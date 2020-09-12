@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { connect, useDispatch } from "react-redux";
-import { addUser, addError } from "../redux/actions";
+import { addUser, addNotification } from "../redux/actions";
 import MapGl from "../components/Map/Map";
 import styled from "styled-components";
 
@@ -21,17 +21,20 @@ const Map = () => {
       try {
         const resp = await fetch(ENDPOINT, OPTIONS);
         if (resp.status === 401) {
-          dispatch(
-            addError(
-              "You are browsing as a GUEST, some features might not be available to you"
+          return dispatch(
+            addNotification(
+              "You are browsing as a GUEST, some features might not be available to you",
+              "warning"
             )
           );
-          return console.log("Unathorized");
+        } else if (!resp.ok) {
+          return dispatch(addNotification("Something went wrong"));
+        } else {
+          const user = await resp.json();
+          return dispatch(addUser(user));
         }
-        const user = await resp.json();
-        dispatch(addUser(user));
       } catch (error) {
-        console.error(error);
+        dispatch(addNotification("Something went wrong"));
       }
     })();
   });
@@ -45,5 +48,5 @@ const Map = () => {
 
 export default connect(null, {
   addUser,
-  addError,
+  addNotification,
 })(Map);

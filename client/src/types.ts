@@ -24,7 +24,8 @@ export interface User {
   provider: "local" | "github" | "facebook";
 }
 
-export interface ErrorMessage {
+export interface Notification {
   id: number;
   message: string;
+  type?: "error" | "warning";
 }
