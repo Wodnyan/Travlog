@@ -1,11 +1,38 @@
 import express from "express";
+import { User } from "../db/db";
+
+export async function checkUsername(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  const body = req.body;
+  if (!body || !body.username) {
+    const error = new Error("Username missing from body");
+    res.status(400);
+    next(error);
+  }
+  try {
+    const usernameTaken = await User.findOne({
+      username: body.username,
+      provider: "local",
+    });
+    if (!usernameTaken) return next();
+    else {
+      const error = new Error("Username Taken");
+      res.status(409);
+      next(error);
+    }
+  } catch (error) {
+    next(error);
+  }
+}
 
 export function checkAuth(
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
 ) {
-  console.log(req.user);
   if (req.user) {
     next();
   } else {
