@@ -46,9 +46,12 @@ router.post("/local/register", checkUsername, async (req, res, next) => {
       password: hashedPassword,
       provider: "local",
     });
-    res.json({
-      message: "Successful register",
-      user,
+    req.login(user, (err) => {
+      if (err) return next(err);
+      res.json({
+        message: "Successful register",
+        user,
+      });
     });
   } catch (error) {
     next(error);
