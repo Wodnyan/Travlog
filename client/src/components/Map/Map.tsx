@@ -40,7 +40,6 @@ const Map: React.FC<Props> = ({ entries }) => {
 
   //Get Logs
   useEffect(() => {
-    console.log(entries);
     async function getLogEntries() {
       const ENDPOINT = "http://localhost:5050/api/v1/travel-logs";
       const resp = await fetch(ENDPOINT, { credentials: "include" });
