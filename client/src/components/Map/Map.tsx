@@ -4,6 +4,8 @@ import NewMarker from "./NewMarker";
 import MapPin from "./MapPin";
 import { LogEntry } from "../../types";
 import EntryCard from "../EntryCard/EntryCard";
+import { connect, useDispatch } from "react-redux";
+import { addEntry } from "../../redux/actions";
 
 interface MapViewport {
   width: string | number;
@@ -18,8 +20,11 @@ interface NewEntry {
   lat: number;
 }
 
-const Map = () => {
-  const [logEntries, setLogEntries] = useState<[] | LogEntry[]>([]);
+interface Props {
+  entries: [] | LogEntry[];
+}
+
+const Map: React.FC<Props> = ({ entries }) => {
   const [newMarkerLocation, setNewMarkerLocation] = useState<null | NewEntry>(
     null
   );
@@ -31,8 +36,11 @@ const Map = () => {
     longitude: 0,
     zoom: 1,
   });
+  const dispatch = useDispatch();
+
   //Get Logs
   useEffect(() => {
+    console.log(entries);
     async function getLogEntries() {
       const ENDPOINT = "http://localhost:5050/api/v1/travel-logs";
       const resp = await fetch(ENDPOINT, { credentials: "include" });
@@ -41,19 +49,19 @@ const Map = () => {
         return console.log("No entries found");
       }
       data.forEach((entry: any) => {
-        setLogEntries((prev) => [
-          ...prev,
-          {
+        dispatch(
+          addEntry({
             _id: entry._id,
             description: entry.description,
             title: entry.title,
             lat: entry.lat,
             lng: entry.long,
-          },
-        ]);
+          })
+        );
       });
     }
     getLogEntries();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   //Resize map on browser resize.
   useEffect(() => {
@@ -91,7 +99,7 @@ const Map = () => {
       {newMarkerLocation && (
         <NewMarker lng={newMarkerLocation.lng} lat={newMarkerLocation.lat} />
       )}
-      {(logEntries as LogEntry[]).map((entry) => (
+      {(entries as LogEntry[]).map((entry) => (
         <div key={entry._id}>
           <Marker latitude={entry.lat} longitude={entry.lng}>
             <div onClick={() => setShowPopup(entry._id || null)}>
@@ -100,8 +108,8 @@ const Map = () => {
           </Marker>
           {showPopup === entry._id && (
             <Popup
-              latitude={entry.lat}
-              longitude={entry.lng}
+              latitude={entry.lat || 0}
+              longitude={entry.lng || 0}
               closeButton={false}
             >
               <EntryCard title={entry.title} description={entry.description} />
@@ -112,4 +120,13 @@ const Map = () => {
     </ReactMapGl>
   );
 };
-export default Map;
+
+const mapStateToProps = (state: any) => {
+  const { entries } = state;
+  return { entries };
+};
+
+// export default Map;
+export default connect(mapStateToProps, {
+  addEntry,
+})(Map);

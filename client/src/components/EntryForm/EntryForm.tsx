@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { connect, useDispatch } from "react-redux";
+import { addEntry, addNotification } from "../../redux/actions";
 import styled from "styled-components";
 import { Button } from "../../styles/Button";
 import { LogEntry } from "../../types";
@@ -9,6 +11,13 @@ const Form = styled.form`
   width: 300px;
   padding: 1em;
   background: #ccc;
+  z-index: 491248124120984901284012;
+`;
+
+const FormButton = styled(Button)`
+  margin: 10px auto 0px;
+  padding: 0.5rem 1rem;
+  color: blue;
 `;
 
 const Input = styled.input`
@@ -31,22 +40,17 @@ const Label = styled.label`
 interface EntryForm {
   lng: number;
   lat: number;
-  onSubmitComplete?: () => void;
-  onSubmitFailure?: (error: any) => void;
 }
 
-const EntryForm: React.FC<EntryForm> = ({
-  onSubmitComplete,
-  onSubmitFailure,
-  lng,
-  lat,
-}) => {
+const EntryForm: React.FC<EntryForm> = ({ lng, lat }) => {
   const [fields, setFields] = useState<LogEntry>({
     lng: lng,
     lat: lat,
     description: "",
     title: "",
   });
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setFields((prev) => ({
@@ -73,15 +77,21 @@ const EntryForm: React.FC<EntryForm> = ({
       }),
     };
     try {
-      const addNewEntry = await fetch(ENDPOINT, options);
-      const resp = await addNewEntry.json();
-      if (onSubmitComplete) {
-        onSubmitComplete();
-      }
+      const resp = await fetch(ENDPOINT, options);
+      const { data } = await resp.json();
+      dispatch(
+        addEntry({
+          lat: data.lat,
+          lng: data.long,
+          _id: data._id,
+          description: data.description,
+          title: data.title,
+        })
+      );
     } catch (error) {
-      if (onSubmitFailure) {
-        onSubmitFailure(error);
-      }
+      dispatch(
+        addNotification("Something went wrong, try again later", "error")
+      );
     }
   };
   const handleChange = (
@@ -107,8 +117,9 @@ const EntryForm: React.FC<EntryForm> = ({
           onChange={handleChange}
         />
       </Label>
-      <Button>Submit</Button>
+      <FormButton>Submit</FormButton>
     </Form>
   );
 };
-export default EntryForm;
+// export default EntryForm;
+export default connect(null, { addEntry, addNotification })(EntryForm);
