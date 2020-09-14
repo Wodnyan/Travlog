@@ -1,4 +1,4 @@
-import { User, Notification } from "../types";
+import { User, Notification, LogEntry } from "../types";
 
 export const addUser = (user: User) => ({
   type: "ADD_USER",
@@ -24,4 +24,9 @@ export const removeNotification = (id: number) => ({
   payload: {
     id,
   },
+});
+
+export const addEntry = (entry: LogEntry) => ({
+  type: "ADD_ENTRY",
+  payload: entry,
 });
