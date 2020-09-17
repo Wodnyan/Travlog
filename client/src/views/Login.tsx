@@ -29,6 +29,7 @@ const FullHeightCenter = styled.div`
 `;
 
 const ErrorMessage = styled.p`
+  margin: 10px 0;
   font-size: 1.2rem;
   color: red;
 `;
@@ -63,7 +64,10 @@ const Login = () => {
         history.push("/map");
       }
     } catch (error) {
-      console.log(error);
+      inputDispatch({
+        type: "error",
+        payload: "Something went wrong",
+      });
     }
   };
 
