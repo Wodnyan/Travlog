@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect, useDispatch } from "react-redux";
-import { addEntry, addNotification } from "../../redux/actions";
+import { addEntry, addNotification, updateEntry } from "../../redux/actions";
 import styled from "styled-components";
 import { Button } from "../../styles/Button";
 import { LogEntry } from "../../types";
@@ -40,14 +40,25 @@ const Label = styled.label`
 interface EntryForm {
   lng: number;
   lat: number;
+  type: "PUT" | "POST";
+  description?: string;
+  title?: string;
+  _id?: string;
 }
 
-const EntryForm: React.FC<EntryForm> = ({ lng, lat }) => {
+const EntryForm: React.FC<EntryForm> = ({
+  lng,
+  lat,
+  description,
+  title,
+  type,
+  _id,
+}) => {
   const [fields, setFields] = useState<LogEntry>({
     lng: lng,
     lat: lat,
-    description: "",
-    title: "",
+    description: description || "",
+    title: title || "",
   });
 
   const dispatch = useDispatch();
@@ -60,7 +71,7 @@ const EntryForm: React.FC<EntryForm> = ({ lng, lat }) => {
     }));
   }, [lng, lat]);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handlePOSTSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const ENDPOINT = "http://localhost:5050/api/v1/travel-logs";
     const options: RequestInit = {
@@ -94,6 +105,40 @@ const EntryForm: React.FC<EntryForm> = ({ lng, lat }) => {
       );
     }
   };
+
+  const handlePUTSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const ENDPOINT = `http://localhost:5050/api/v1/travel-logs/${_id}`;
+    const options: RequestInit = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        title: fields.title,
+        description: fields.description,
+        lat: fields.lat,
+        long: fields.lng,
+      }),
+    };
+    try {
+      const resp = await fetch(ENDPOINT, options);
+      if (!resp.ok) {
+        dispatch(
+          addNotification("Something went wrong, try again later", "error")
+        );
+      }
+      const foo = await resp.json();
+      dispatch(updateEntry(foo.data));
+      dispatch(addNotification("Updated an Entry"));
+    } catch (error) {
+      dispatch(
+        addNotification("Something went wrong, try again later", "error")
+      );
+    }
+  };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -104,7 +149,7 @@ const EntryForm: React.FC<EntryForm> = ({ lng, lat }) => {
     }));
   };
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={type === "POST" ? handlePOSTSubmit : handlePUTSubmit}>
       <Label>
         Title
         <Input name="title" value={fields.title} onChange={handleChange} />
@@ -121,5 +166,6 @@ const EntryForm: React.FC<EntryForm> = ({ lng, lat }) => {
     </Form>
   );
 };
-// export default EntryForm;
-export default connect(null, { addEntry, addNotification })(EntryForm);
+export default connect(null, { addEntry, addNotification, updateEntry })(
+  EntryForm
+);

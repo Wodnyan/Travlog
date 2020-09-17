@@ -30,3 +30,16 @@ export const addEntry = (entry: LogEntry) => ({
   type: "ADD_ENTRY",
   payload: entry,
 });
+
+export const removeEntry = (id: string) => ({
+  type: "REMOVE_ENTRY",
+  payload: id,
+});
+
+export const updateEntry = (entry: LogEntry) => ({
+  type: "UPDATE_ENTRY",
+  payload: {
+    id: entry._id,
+    update: entry,
+  },
+});
