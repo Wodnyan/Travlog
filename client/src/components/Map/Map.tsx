@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ReactMapGl, { Marker, PointerEvent, Popup } from "react-map-gl";
 import NewMarker from "./NewMarker";
 import MapPin from "./MapPin";
-import { LogEntry } from "../../types";
+import { LogEntry, User } from "../../types";
 import EntryCard from "../EntryCard/EntryCard";
 import { connect, useDispatch } from "react-redux";
 import { addEntry } from "../../redux/actions";
@@ -22,9 +22,10 @@ interface NewEntry {
 
 interface Props {
   entries: [] | LogEntry[];
+  user: null | User;
 }
 
-const Map: React.FC<Props> = ({ entries }) => {
+const Map: React.FC<Props> = ({ entries, user }) => {
   const [newMarkerLocation, setNewMarkerLocation] = useState<null | NewEntry>(
     null
   );
@@ -96,7 +97,11 @@ const Map: React.FC<Props> = ({ entries }) => {
       onDblClick={handleAddNewMarker}
     >
       {newMarkerLocation && (
-        <NewMarker lng={newMarkerLocation.lng} lat={newMarkerLocation.lat} />
+        <NewMarker
+          isAuth={user === null ? false : true}
+          lng={newMarkerLocation.lng}
+          lat={newMarkerLocation.lat}
+        />
       )}
       {(entries as LogEntry[]).map((entry) => (
         <div key={entry._id}>
@@ -127,8 +132,9 @@ const Map: React.FC<Props> = ({ entries }) => {
 };
 
 const mapStateToProps = (state: any) => {
-  const { entries } = state;
-  return { entries };
+  console.log(state);
+  const { entries, user } = state;
+  return { entries, user };
 };
 
 // export default Map;

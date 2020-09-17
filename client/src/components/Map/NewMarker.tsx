@@ -6,6 +6,7 @@ import Form from "../EntryForm/EntryForm";
 interface NewMarker {
   lng: number;
   lat: number;
+  isAuth: boolean;
 }
 
 const Container = styled.div`
@@ -14,7 +15,8 @@ const Container = styled.div`
   }
 `;
 
-const NewMarker: React.FC<NewMarker> = ({ lng, lat }) => {
+const NewMarker: React.FC<NewMarker> = ({ lng, lat, isAuth }) => {
+  if (!isAuth) return null;
   return (
     <Container>
       <Popup

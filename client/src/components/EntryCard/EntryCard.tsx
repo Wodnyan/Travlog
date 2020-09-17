@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { CSSTransition } from "react-transition-group";
-import { removeEntry } from "../../redux/actions";
+import { removeEntry, addNotification } from "../../redux/actions";
 import { connect, useDispatch } from "react-redux";
 import styled from "styled-components";
 import Form from "../EntryForm/EntryForm";
@@ -110,15 +110,14 @@ const EntryCard: React.FC<Props> = ({ _id, title, lng, lat, description }) => {
       const foo = await resp.json();
       console.log(foo);
       console.log(resp);
-      if (resp.ok) {
-        dispatch(removeEntry(_id));
-      } else {
-        //Error handling
-        console.log("Oof");
+      if (!resp.ok) {
+        throw new Error();
       }
+      dispatch(removeEntry(_id));
     } catch (error) {
-      console.log("Entry Card");
-      console.error(error);
+      dispatch(
+        addNotification("Something went wrong, try again later.", "error")
+      );
     }
   };
 
@@ -199,4 +198,4 @@ const EntryCard: React.FC<Props> = ({ _id, title, lng, lat, description }) => {
     </Container>
   );
 };
-export default connect(null, { removeEntry })(EntryCard);
+export default connect(null, { removeEntry, addNotification })(EntryCard);
