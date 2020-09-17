@@ -24,7 +24,7 @@ const NewMarker: React.FC<NewMarker> = ({ lng, lat }) => {
         closeButton={false}
         className="popup"
       >
-        <Form lng={lng} lat={lat} />
+        <Form lng={lng} lat={lat} type="POST" />
       </Popup>
     </Container>
   );

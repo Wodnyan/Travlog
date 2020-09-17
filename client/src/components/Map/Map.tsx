@@ -111,7 +111,13 @@ const Map: React.FC<Props> = ({ entries }) => {
               longitude={entry.lng || 0}
               closeButton={false}
             >
-              <EntryCard title={entry.title} description={entry.description} />
+              <EntryCard
+                _id={entry._id}
+                lng={entry.lng}
+                lat={entry.lat}
+                title={entry.title}
+                description={entry.description}
+              />
             </Popup>
           )}
         </div>
