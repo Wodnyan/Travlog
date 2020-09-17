@@ -33,16 +33,16 @@ const Container = styled.div`
     transform: translate(-110%);
   }
 
-  .settings-enter {
+  .options-enter {
     transform: translate(110%);
     transition: transform 0.3s ease;
   }
-  .settings-enter-active {
+  .options-enter-active {
     transform: translate(0);
   }
-  .settings-exit {
+  .options-exit {
   }
-  .settings-exit-active {
+  .options-exit-active {
     transition: transform 0.3s ease;
     transform: translate(110%);
   }
@@ -155,7 +155,7 @@ const EntryCard: React.FC<Props> = ({ _id, title, lng, lat, description }) => {
       <CSSTransition
         in={menu === "options"}
         timeout={300}
-        classNames="settings"
+        classNames="options"
         onEnter={calcHeight}
         unmountOnExit
       >
