@@ -17,11 +17,13 @@ function setBackgroundColor(props: NotificationProps) {
 
 export const Notification = styled.div<NotificationProps>`
   display: flex;
+  justify-content: space-between;
   padding: 0.7rem 1rem;
   margin: 10px 0;
   width: 350px;
   border-radius: 7px;
   background: ${(props) => setBackgroundColor(props)};
+  color: #fff;
   &.notification-enter {
     transform: translate(-150px);
   }
