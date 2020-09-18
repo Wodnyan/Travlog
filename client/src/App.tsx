@@ -8,7 +8,7 @@ import {
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { GlobalStyles } from "./styles/Global";
 import { Notification as NotificationTypes } from "./types";
-import { Notification } from "./styles/Notification";
+import Notification from "./components/Notification/Notification";
 import { AbsoluteContainer } from "./styles/Global";
 import Map from "./views/Map";
 import LoginPage from "./views/Login";
@@ -57,7 +57,7 @@ const App: React.FC<Props> = ({ notifications }) => {
                   timeout={200}
                   unmountOnExit
                 >
-                  <Notification type={notification.type}>
+                  <Notification id={notification.id} type={notification.type}>
                     {notification.message}
                   </Notification>
                 </CSSTransition>

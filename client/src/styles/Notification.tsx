@@ -16,6 +16,7 @@ function setBackgroundColor(props: NotificationProps) {
 }
 
 export const Notification = styled.div<NotificationProps>`
+  display: flex;
   padding: 0.7rem 1rem;
   margin: 10px 0;
   width: 350px;

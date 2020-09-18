@@ -65,6 +65,7 @@ router.post("/", checkAuth, async (req, res, next) => {
 router.put("/:logId", checkAuth, (req, res, next) => {
   const { logId } = req.params;
   const userId = req.user!._id;
+  console.log(req.body);
   if (!logId) {
     res.status(400);
     const error = new Error("Log id missing from URL");
@@ -74,17 +75,21 @@ router.put("/:logId", checkAuth, (req, res, next) => {
     if (err) next(err);
     const travelLog: TravelLog = doc!.travel_logs!.id(logId);
     //Check if entry with the provided id exists.
+    console.log(travelLog);
     if (travelLog === null) {
       res.status(404);
       const error = new Error("Couldn't find entry");
       next(error);
     }
     travelLog.set(req.body);
-    await doc.save();
-    res.json({
-      message: "Successfully updated 1 entry",
-      data: doc,
-    });
+    console.log(travelLog);
+    if (doc) {
+      await doc.save();
+      res.json({
+        message: "Successfully updated 1 entry",
+        data: travelLog,
+      });
+    }
   });
 });
 //Delete One
@@ -105,11 +110,13 @@ router.delete("/:logId", checkAuth, (req, res, next) => {
       next(error);
     }
     travelLog.remove();
-    await doc.save();
-    res.json({
-      message: "Successfully updated 1 entry",
-      data: doc,
-    });
+    if (doc) {
+      await doc.save();
+      res.json({
+        message: "Successfully updated 1 entry",
+        data: doc,
+      });
+    }
   });
 });
 
