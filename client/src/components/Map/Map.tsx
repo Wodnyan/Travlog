@@ -132,7 +132,6 @@ const Map: React.FC<Props> = ({ entries, user }) => {
 };
 
 const mapStateToProps = (state: any) => {
-  console.log(state);
   const { entries, user } = state;
   return { entries, user };
 };
