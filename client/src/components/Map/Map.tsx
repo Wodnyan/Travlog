@@ -88,6 +88,12 @@ const Map: React.FC<Props> = ({ entries, user }) => {
       };
     });
   };
+  const removeLogEntryForm = () => setNewMarkerLocation(null);
+  const removeEntryPopup = () => setShowPopup(null);
+  const removeAllMarkers = () => {
+    removeLogEntryForm();
+    removeEntryPopup();
+  };
   return (
     <ReactMapGl
       {...viewport}
@@ -95,6 +101,7 @@ const Map: React.FC<Props> = ({ entries, user }) => {
       onViewportChange={(viewport) => setViewport(viewport)}
       mapboxApiAccessToken="pk.eyJ1Ijoid29kbnlhbiIsImEiOiJja2UydWJuZW0wY3NxMzduN2ZwOGIxdm9lIn0.xNPhlTTsb9LY3LDXiAJ9sw"
       onDblClick={handleAddNewMarker}
+      onClick={removeAllMarkers}
     >
       {newMarkerLocation && (
         <NewMarker
@@ -104,13 +111,13 @@ const Map: React.FC<Props> = ({ entries, user }) => {
         />
       )}
       {(entries as LogEntry[]).map((entry) => (
-        <div key={entry._id}>
+        <div key={entry._id} onClick={removeLogEntryForm}>
           <Marker latitude={entry.lat} longitude={entry.lng}>
             <div onClick={() => setShowPopup(entry._id || null)}>
               <MapPin />
             </div>
           </Marker>
-          {showPopup === entry._id && (
+          {showPopup === entry._id && newMarkerLocation === null && (
             <Popup
               latitude={entry.lat || 0}
               longitude={entry.lng || 0}
