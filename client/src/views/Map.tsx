@@ -44,7 +44,7 @@ const Map: React.FC<Props> = ({ user }) => {
         dispatch(addNotification("Something went wrong"));
       }
     })();
-  });
+  }, [dispatch]);
 
   useEffect(() => {
     if (user !== null) {
