@@ -9,8 +9,13 @@ import {
 import { Button } from "../styles/Button";
 import { Form } from "../styles/Form";
 import { SplitInTwoVertical, ImageContainer } from "../styles/Global";
+import OauthButton from "../components/OauthButton/OauthButton";
 //@ts-ignore
-import EarthImage from "../images/world-min.jpg";
+import EarthImage from "../assets/world-min.jpg";
+//@ts-ignore
+import githubLogo from "../assets/github.svg";
+//@ts-ignore
+import facebookLogo from "../assets/facebook.svg";
 import styled from "styled-components";
 
 const inputInitArgs = {
@@ -18,7 +23,10 @@ const inputInitArgs = {
   password: "",
 };
 
-const OAuthContainer = styled.div``;
+const OAuthContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 const FullHeightCenter = styled.div`
   height: 100%;
@@ -32,6 +40,11 @@ const ErrorMessage = styled.p`
   margin: 10px 0;
   font-size: 1.2rem;
   color: red;
+`;
+
+const Paragraph = styled.p`
+  font-size: 1.1rem;
+  margin: 1rem 0;
 `;
 
 const Login = () => {
@@ -107,10 +120,22 @@ const Login = () => {
           <Button type="submit">Login</Button>
           {input.error && <ErrorMessage>{input.error}</ErrorMessage>}
         </Form>
-        <p>Or login with...</p>
+        <Paragraph>Or login with...</Paragraph>
         <OAuthContainer>
-          <a href="http://localhost:5050/auth/github">Github</a>
-          <a href="http://localhost:5050/auth/facebook">Facebook</a>
+          <OauthButton
+            href="http://localhost:5050/auth/github"
+            icon={githubLogo}
+            iconBackground="#24292e"
+          >
+            GitHub
+          </OauthButton>
+          <OauthButton
+            href="http://localhost:5050/auth/facebook"
+            icon={facebookLogo}
+            iconBackground="#3b5998"
+          >
+            Facebook
+          </OauthButton>
         </OAuthContainer>
       </FullHeightCenter>
     </SplitInTwoVertical>
