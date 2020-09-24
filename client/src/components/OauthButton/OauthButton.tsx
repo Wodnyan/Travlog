@@ -7,6 +7,7 @@ interface Props {
   icon: string;
   href: string;
   iconBackground?: string;
+  onClick?: () => void;
 }
 
 interface IconContainerProps {
@@ -27,6 +28,11 @@ const Button = styled(S.Button)`
     background: #c4c4c4;
   }
   .text {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 100%;
     color: currentColor;
     text-decoration: none;
   }
@@ -47,9 +53,10 @@ const OauthButton: React.FC<Props> = ({
   icon,
   href,
   iconBackground,
+  onClick,
 }) => {
   return (
-    <Button>
+    <Button onClick={onClick}>
       {icon && (
         <IconContainer background={iconBackground || "red"}>
           <img src={icon} alt="oauth icon" />
