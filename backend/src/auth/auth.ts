@@ -6,6 +6,7 @@ import passport from "passport";
 
 const router = Router();
 const CLIENT_URL = "http://localhost:3000/map";
+const LOGOUT_REDIRECT = "http://localhost:3000";
 router.get("/github", passport.authenticate("github"));
 router.get(
   "/github/callback",
@@ -69,7 +70,7 @@ router.get("/login", (req, res, next) => {
 });
 router.get("/logout", (req, res) => {
   req.logout();
-  res.redirect(CLIENT_URL);
+  res.redirect(LOGOUT_REDIRECT);
 });
 
 export default router;

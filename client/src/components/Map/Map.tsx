@@ -119,8 +119,8 @@ const Map: React.FC<Props> = ({ entries, user }) => {
           </Marker>
           {showPopup === entry._id && newMarkerLocation === null && (
             <Popup
-              latitude={entry.lat || 0}
-              longitude={entry.lng || 0}
+              latitude={entry.lat}
+              longitude={entry.lng}
               closeButton={false}
             >
               <EntryCard

@@ -2,14 +2,20 @@ import React, { useEffect } from "react";
 import { connect, useDispatch } from "react-redux";
 import { addUser, addNotification } from "../redux/actions";
 import MapGl from "../components/Map/Map";
+import { AbsoluteContainer } from "../styles/Global";
+import { User } from "../types";
+import Menu from "../components/Menu/Menu";
 import styled from "styled-components";
 
 const Container = styled.section`
   position: relative;
-  height: 100%;
 `;
 
-const Map = () => {
+interface Props {
+  user: User | null;
+}
+
+const Map: React.FC<Props> = ({ user }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     (async function () {
@@ -37,20 +43,30 @@ const Map = () => {
         dispatch(addNotification("Something went wrong"));
       }
     })();
-  });
+  }, [dispatch]);
 
   useEffect(() => {
-    dispatch(addNotification("Double click on the map to add a new entry"));
-  }, [dispatch]);
+    if (user !== null) {
+      dispatch(addNotification("Double click on the map to add a new entry"));
+    }
+  }, [dispatch, user]);
 
   return (
     <Container>
       <MapGl />
+      <AbsoluteContainer right={10} top={10}>
+        <Menu />
+      </AbsoluteContainer>
     </Container>
   );
 };
 
-export default connect(null, {
+const mapStateToProps = (state: any) => {
+  const { user } = state;
+  return { user };
+};
+
+export default connect(mapStateToProps, {
   addUser,
   addNotification,
 })(Map);
