@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 export const BurgerContainer = styled.div`
   margin: 1rem;
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -12,28 +12,30 @@ export const BurgerContainer = styled.div`
   cursor: pointer;
 `;
 export const BurgerLines = styled.div`
+  --burger-line-width: 23px;
+  --burger-line-height: 3px;
   position: relative;
-  width: 30px;
-  height: 5px;
+  width: var(--burger-line-width);
+  height: var(--burger-line-height);
   border-radius: 10px;
   background: white;
   &::after,
   &::before {
     content: "";
     position: absolute;
-    height: 5px;
-    width: 30px;
+    width: var(--burger-line-width);
+    height: var(--burger-line-height);
     border-radius: 10px;
     background-color: #fff;
     transition: 0.2s ease transform;
   }
   &::after {
-    transform: translateY(-16px);
+    transform: translateY(-10px);
   }
   &::before {
-    transform: translateY(16px);
+    transform: translateY(10px);
   }
-  &.retard {
+  &.burger-anim {
     background-color: transparent;
     &::before {
       transform: rotate(45deg);

@@ -9,7 +9,6 @@ import styled from "styled-components";
 
 const Container = styled.section`
   position: relative;
-  height: 100%;
 `;
 
 interface Props {
@@ -55,7 +54,7 @@ const Map: React.FC<Props> = ({ user }) => {
   return (
     <Container>
       <MapGl />
-      <AbsoluteContainer right={0} top={0}>
+      <AbsoluteContainer right={10} top={10}>
         <Menu />
       </AbsoluteContainer>
     </Container>
