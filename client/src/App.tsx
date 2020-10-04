@@ -13,6 +13,7 @@ import { AbsoluteContainer } from "./styles/Global";
 import Map from "./views/Map";
 import LoginPage from "./views/Login";
 import SignUpPage from "./views/SignUp";
+import LandingPage from "./views/LandingPage";
 
 interface Props {
   notifications?: [] | NotificationTypes[];
@@ -37,6 +38,9 @@ const App: React.FC<Props> = ({ notifications }) => {
       <GlobalStyles />
       <Router>
         <Switch>
+          <Route exact path="/">
+            <LandingPage />
+          </Route>
           <Route exact path="/map">
             <Map />
           </Route>

@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react";
+import React, { useReducer } from "react";
 import { useHistory } from "react-router-dom";
 import { inputReducer } from "../reducers";
 import {
@@ -11,7 +11,7 @@ import { Form } from "../styles/Form";
 import { FullHeightCenter, Title, ErrorMessage } from "../styles/Global";
 import { SplitInTwoVertical, ImageContainer } from "../styles/Global";
 //@ts-ignore
-import EarthImage from "../images/world-min.jpg";
+import EarthImage from "../assets/world-min.jpg";
 import styled from "styled-components";
 
 const inputInitArgs = {

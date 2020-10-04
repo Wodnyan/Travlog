@@ -83,7 +83,6 @@ const Login = () => {
       });
     }
   };
-
   return (
     <SplitInTwoVertical>
       <ImageContainer>
@@ -126,15 +125,17 @@ const Login = () => {
             href="http://localhost:5050/auth/github"
             icon={githubLogo}
             iconBackground="#24292e"
+            onClick={() => inputDispatch({ type: "loading", payload: true })}
           >
-            GitHub
+            {input.isLoading ? "Loading..." : "Github"}
           </OauthButton>
           <OauthButton
             href="http://localhost:5050/auth/facebook"
             icon={facebookLogo}
             iconBackground="#3b5998"
+            onClick={() => inputDispatch({ type: "loading", payload: true })}
           >
-            Facebook
+            {input.isLoading ? "Loading..." : "Facebook"}
           </OauthButton>
         </OAuthContainer>
       </FullHeightCenter>

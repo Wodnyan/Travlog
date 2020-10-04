@@ -14,7 +14,7 @@ export const GlobalStyles = createGlobalStyle`
   #root{
     height: 100%;
     background: grey;
-    overflow-y: hidden;
+    /* overflow-y: hidden; */
   }
   body {
     font-family: 'Roboto', sans-serif;
