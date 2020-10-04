@@ -8,6 +8,10 @@ const Image = styled.img`
   position: relative;
   width: 100%;
   height: 100%;
+  @media (max-width: 760px) {
+    width: auto;
+    height: 100vh;
+  }
 `;
 const CarouselContainer = styled.div`
   width: 100%;
@@ -48,11 +52,12 @@ const DotContainer = styled.div`
   transform: translateX(-50%);
   display: flex;
 `;
-const Dot = styled.div`
+const Dot = styled.div<{ current: boolean }>`
   --dot-size: 30px;
   width: var(--dot-size);
   height: var(--dot-size);
-  background: #fff;
+  background: ${({ current }) => (current ? "#fff" : "transparent")};
+  border: 5px solid #fff;
   margin-right: 1rem;
   border-radius: 50%;
   cursor: pointer;
@@ -65,7 +70,18 @@ const Carousel = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    setSlideWidth(containerRef!.current!.scrollWidth);
+    setSlideWidth(containerRef!.current!.offsetWidth);
+  }, [containerRef]);
+
+  useEffect(() => {
+    window.onresize = (e: any) => {
+      console.log(containerRef!.current!.offsetWidth);
+      console.log(containerRef!.current!);
+      setSlideWidth(containerRef!.current!.offsetWidth);
+    };
+    return () => {
+      window.onresize = null;
+    };
   }, [containerRef]);
 
   const handleClickDot = (index: number) => {
@@ -87,7 +103,9 @@ const Carousel = () => {
       </CarouselList>
       <DotContainer>
         {Array.apply(null, Array(3)).map(function (_, i) {
-          return <Dot onClick={() => handleClickDot(i)} />;
+          return (
+            <Dot current={i === slideIndex} onClick={() => handleClickDot(i)} />
+          );
         })}
       </DotContainer>
     </CarouselContainer>
